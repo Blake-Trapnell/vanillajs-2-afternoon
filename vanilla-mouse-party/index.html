@@ -43,12 +43,12 @@
             position: absolute;
             border-radius: 50%;
             animation: shrink 1s ease-in-out both;
-            opacity: .5;
+            
         }
 
         @keyframes shrink {
             100% {
-                transform: scale(0)
+                transform: scale(20)
             }
         }
     </style>
@@ -58,6 +58,50 @@
 </body>
 
 <script>
+ let mousePosition = {x: 0, y: 0}
+ let drawId;
+ let getRandomNumber = (min, max) => {
+     return Math.round(Math.random() * (max - min + 1)) + min; }
+     
+window.addEventListener('mousemove', (e) => {
+mousePosition.x = e.pageX;
+mousePosition.y = e.pageY;
+});
+
+let draw = () => {
+    return setInterval(()=> {
+const container = document.getElementById("wrap");
+const color = `background:rgb(${getRandomNumber(
+  0,
+  255
+)},${getRandomNumber(0, 255)}, ${getRandomNumber(0, 255)});`;
+const ballSize = getRandomNumber(10, 10);
+const size = `height:${ballSize}px; width:${ballSize}px;`;
+const left = `left:${getRandomNumber(
+  mousePosition.x - ballSize,
+  mousePosition.x
+)}px;`;
+const top = `top:${getRandomNumber(
+  mousePosition.y - ballSize,
+  mousePosition.y
+)}px; `;
+const style = `${left}${top}${color}${size}`;
+let ball = document.createElement("div")
+ball.classList.add("ball")
+ball.style = style
+    ball.addEventListener("animationend", (e)=>{
+        e.target.remove()
+    })
+    container.appendChild(ball);
+    },30)
+}
+
+window.addEventListener("mouseover", ()=> {
+    drawId = draw();
+})
+window.addEventListener("mouseout", ()=> {clearInterval(drawId)
+})
+
 
 </script>
 
